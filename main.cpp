@@ -57,12 +57,19 @@ public:
     Shared_ptr_toy& operator = (const Shared_ptr_toy& other)
     {
         if (this == &other) return *this;
-        if (toy != nullptr) this->toy = nullptr;
-        --this->count;
-        if (*count <= 0) delete this->toy;
-        toy = other.toy;
-        count = other.count;
+        if (toy != nullptr) {
+            --this->count;
+            if (*count <= 0) {
+                delete this->toy;
+                this->toy = nullptr;
+                delete this->count;
+                this->count = nullptr;
+            }
+        }
+        toy = new Toy(*other.toy);
+        count = new int(*other.count);
         ++*count;
+        return *this;
     }
 };
 
